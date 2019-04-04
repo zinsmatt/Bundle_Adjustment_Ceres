@@ -2,6 +2,7 @@
 #include <ceres/ceres.h>
 #include <ceres/rotation.h>
 
+#include "ba_problem.h"
 
 struct snavely_reprojection_error
 {

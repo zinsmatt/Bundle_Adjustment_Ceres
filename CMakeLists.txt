@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(Ceres_tuto)
+project(BundleAdjustement_Ceres)
 find_package(Ceres REQUIRED)
 include_directories(${CERES_INCLUDE_DIRS})
 add_executable(${PROJECT_NAME}

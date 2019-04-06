@@ -38,4 +38,5 @@ bool BA_Problem::load_file(const std::string& filename)
     int idx = num_cameras_ * 9 + i * 3;
     file >> parameters_[idx] >> parameters_[idx + 1] >> parameters_[idx + 2];
   }
+  return true;
 }

@@ -48,7 +48,43 @@ struct snavely_reprojection_error
 int main()
 {
 
-  ceres::Problem pb;
+  google::InitGoogleLogging("losc");
+
+  BA_Problem ba_problem;
+  if (!ba_problem.load_file("../problem-126-40037-pre.txt"))
+  {
+    std::cerr << "Error : unable to open file\n";
+  }
+
+
+
+  const double* observations = ba_problem.observations();
+
+  ceres::Problem problem;
+
+  for (int i = 0; i < ba_problem.num_observations(); ++i)
+  {
+    ceres::CostFunction* cost_function =
+        snavely_reprojection_error::Create(observations[2 * i],
+                                           observations[2 * i + 1]);
+
+    problem.AddResidualBlock(cost_function, nullptr,
+                             ba_problem.mutable_camera_for_observation(i),
+                             ba_problem.mutable_point_for_observation(i));
+  }
+
+  ceres::Solver::Options options;
+  options.linear_solver_type = ceres::DENSE_SCHUR;
+  options.minimizer_progress_to_stdout = true;
+  options.num_threads = 8;
+
+  ceres::Solver::Summary summary;
+  ceres::Solve(options, &problem, &summary);
+
+
+
+  std::cout << summary.FullReport() << "\n";
+
 
   return 0;
 }
